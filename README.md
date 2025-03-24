@@ -1,91 +1,182 @@
-# Project: QR-maker
+# Desafío Backend: NestJS - Gestión de Usuarios
 
-QR-Maker that creates unique qr that allow change the content without changing the qr file, stored in Postgres BDD.
+Este proyecto implementa una API RESTful para la gestión de usuarios, cumpliendo con los requisitos del desafío backend.
 
-## Project Structure Overview
+## Descripción
 
-### Directory Structure
+La API expone funcionalidades para la creación, obtención, modificación y eliminación lógica de usuarios, utilizando NestJS y PostgreSQL.
 
-Project structure:
+## Funcionalidades
 
-- **`src`**: Source code directory.
-  - **`common`**:
-    - **`adapters`**: External configuration of critical libraries to have important functions on the code.
-    - **`entities`**: Base entity that extends some common variables to other entities and give behaviors pre insert and update.
-    - **`pipes`**: Injectable customized validators to consume in the endpoints.
-  - **`config`**:
-    - **`app.config.ts`**: Load a small configration to parse the value of application Port.
-  - **`modules`**
-    - **`category`**: Base module that controls all logic over categories.
-    - **`qrcreator-handler`**: Base module that controls all logic over qrCreator, and interact with category module.
-  - **`app.module`**
-  - **`main.ts`** :
-- **`.env`**: Eenvironment variables file.
-- **`.eslintrc.js`**: rules to good programming practices.
-- **`.gitignore`**: Files and directories should be ignored by Git version control.
-- **`.prettierrc.js`**: Configuration file to work fine with eslint.
-- **`package.json`**: Npm configuration file.
-- **`tsconfig.json`**: TypeScript configuration file.
+La API RESTful implementa los siguientes endpoints:
 
-### Environment Configuration
+###   Registro de Usuario
 
-For development, a `.env` file is used to manage environment variables. The following variables are defined:
+* `POST /users`
+*     Recibe los campos: `name`, `email`, `password` y un array de objetos `phones` (number, citycode, countrycode). Todos los campos son obligatorios. [cite: 23]
+*     Valida que el email tenga el formato correcto (expresión regular). [cite: 26, 27]
+*     Valida que la contraseña tenga el formato correcto (expresión regular configurable). [cite: 27, 28]
+*     Si el email ya existe, retorna un error. [cite: 25]
+*     Retorna el usuario creado con los campos: `id` (UUID), `created`, `modified`, `last_login`, `token` (UUID o JWT), `isactive`. [cite: 23, 24]
+*     Código de estado HTTP adecuado en caso de éxito o error. [cite: 23]
 
-```plaintext
+###   Obtener Todos los Usuarios
+
+* `GET /users`
+*     Devuelve un array con la lista completa de usuarios registrados. [cite: 28, 29, 30]
+*     Respuestas de error: 400 Bad Request (parámetros de consulta incorrectos), 500 Internal Server Error (error inesperado). [cite: 31, 32]
+
+###   Obtener Usuario por ID
+
+* `GET /users/:id`
+*     Obtiene los detalles de un usuario específico por su ID (UUID). [cite: 33, 34, 35, 36, 37, 38, 39]
+*     Respuestas de error: 404 Not Found (usuario no encontrado), 400 Bad Request (ID inválido), 500 Internal Server Error (error inesperado). [cite: 36, 37, 38]
+
+###   Eliminar Usuario por ID
+
+* `DELETE /users/:id`
+*     Elimina lógicamente un usuario por su ID (UUID). [cite: 39, 40, 41, 42, 43, 44, 45]
+*     Respuestas de error: 404 Not Found (usuario no encontrado), 400 Bad Request (ID inválido), 500 Internal Server Error (error inesperado). [cite: 42, 43, 44, 45]
+
+##   Estructura del Proyecto
+
+src: Directorio del código fuente.
+common:
+entities: Entidad base que extiende variables comunes y define comportamientos pre-insertar y actualizar.
+pipes: Validadores personalizados para endpoints.
+config:
+app.config.ts: Carga la configuración del puerto de la aplicación.
+modules:
+users: Módulo base que controla la lógica de usuarios.
+app.module.ts: Módulo principal de la aplicación.
+main.ts: Punto de entrada de la aplicación.
+.env: Archivo de variables de entorno.
+.eslintrc.js: Reglas de buenas prácticas de programación.
+.gitignore: Archivos y directorios ignorados por Git.
+.prettierrc.js: Configuración para trabajar con ESLint.
+package.json: Archivo de configuración de NPM.
+tsconfig.json: Archivo de configuración de TypeScript.
+
+##   Configuración de Entorno
+
+Para el desarrollo, se utiliza un archivo `.env` para gestionar las variables de entorno:
+
 PORT=
-QR_ROUTE=
 DB_HOST=
 DB_PORT=
 DB_NAME=
 DB_USERNAME=
 DB_PASSWORD=
-```
 
-### Development and Deployment Commands
+##   Comandos de Desarrollo y Despliegue
 
-- `npm run start:dev`: Compile TypeScript files to JavaScript and add whach funtion to load changes on real time.
-- `npm run build`: Create the build to load in production.
-- `npm run test`: Run the test of project. Can be used with others flags for more options. (No test right now)
+```bash
+npm run start:dev: Compila los archivos TypeScript a JavaScript y activa la función de "watch" para recargar los cambios en tiempo real.
+npm run build: Crea la compilación para cargar en producción.
+npm run test: Ejecuta las pruebas del proyecto (si las hubiera).
 
-## Documentation
+Okay, aquí tienes un README.md adaptado del ejemplo que proporcionaste, enfocado en los requisitos y detalles del backend del desafío:
 
-### API Endpoints
-  ### QR-Maker
+Markdown
 
-- POST: [/] Endpoint to create new QR Files, requires a Body.
-- GET: [/] Endpoint to get all existing QR files
-- GET: [/:qr-id] Endpoint to get the information of one QR File by id.
-- GET: [/getcontent/:content_id] Endpoint to get the content associated to one qr file.
-- GET: [/get-qr/:content_id] Endpoint that is call when scannig the qr file, return the values storage in BDD.
-- PUT: [/:content_id] Endpoint that update the content associated to one qr.
-- DELETE: [/:content_id] Endpoint that delete QR by content_id.
+# Desafío Backend: NestJS - Gestión de Usuarios
 
-  ### Category
+Este proyecto implementa una API RESTful para la gestión de usuarios, cumpliendo con los requisitos del desafío backend.
 
-- GET: [/] Endpoint to get all existing Categories.
-- GET: [/:id_category] Endpoint to get the information of one Category by id.
-  
+## Descripción
 
-### Dependences
+La API expone funcionalidades para la creación, obtención, modificación y eliminación lógica de usuarios, utilizando NestJS y PostgreSQL.
 
-- **@nestjs**: Provides tools and core function to the function of project.
-- **class-transformer**: Libraries used to add validation in dtos object or creation of entities, work in pair with calss validator.
-- **class-validator**: Libraries used to add validation in dtos object or creation of entities, work in pair with calss transformer.
-- **Dotenv**: Loads environment variables from a .env file, helping manage configuration securely.
-- **Pg**: PostgreSQL client for Node.js that allows interaction with PostgreSQL databases.
-- **Typeorm**: An ORM that allows interaction with databases using entities and repositories.
-- **multer**: Add function to work with files, pipes, diskstorage, filters, etc.
-- **uuid**: Most used library to generate powerfull id to objects.
+## Funcionalidades
 
-### devDependences
+La API RESTful implementa los siguientes endpoints:
 
-- **@types/**: Provides TypeScript type definitions to the libraries, this is only applicable if the library have a definition file, ensuring type safety in development.
-- **eslint**: Ensure and enforce good programming practice in the dev process.
-- **prettier**: Add more functions and complements to eslint.
-- **jest**: Allow the implementation of test.
+###   Registro de Usuario
 
-### Installation Commands
-  Important: Have NodeJs and Install NestJs.
-  For the fist launch, change app.module.ts the configuratios of TypeOrmModule.ForRoot: autoLoadEntities and synchronize in true, after change to false.
-- General dependencies: `npm install`
-- For BDD, install docker with the pg image and create a docker-compose file or install and configure PGAdmin in Dev process.
+* `POST /users`
+*     Recibe los campos: `name`, `email`, `password` y un array de objetos `phones` (number, citycode, countrycode). Todos los campos son obligatorios. [cite: 23]
+*     Valida que el email tenga el formato correcto (expresión regular). [cite: 26, 27]
+*     Valida que la contraseña tenga el formato correcto (expresión regular configurable). [cite: 27, 28]
+*     Si el email ya existe, retorna un error. [cite: 25]
+*     Retorna el usuario creado con los campos: `id` (UUID), `created`, `modified`, `last_login`, `token` (UUID o JWT), `isactive`. [cite: 23, 24]
+*     Código de estado HTTP adecuado en caso de éxito o error. [cite: 23]
+
+###   Obtener Todos los Usuarios
+
+* `GET /users`
+*     Devuelve un array con la lista completa de usuarios registrados. [cite: 28, 29, 30]
+*     Respuestas de error: 400 Bad Request (parámetros de consulta incorrectos), 500 Internal Server Error (error inesperado). [cite: 31, 32]
+
+###   Obtener Usuario por ID
+
+* `GET /users/:id`
+*     Obtiene los detalles de un usuario específico por su ID (UUID). [cite: 33, 34, 35, 36, 37, 38, 39]
+*     Respuestas de error: 404 Not Found (usuario no encontrado), 400 Bad Request (ID inválido), 500 Internal Server Error (error inesperado). [cite: 36, 37, 38]
+
+###   Eliminar Usuario por ID
+
+* `DELETE /users/:id`
+*     Elimina lógicamente un usuario por su ID (UUID). [cite: 39, 40, 41, 42, 43, 44, 45]
+*     Respuestas de error: 404 Not Found (usuario no encontrado), 400 Bad Request (ID inválido), 500 Internal Server Error (error inesperado). [cite: 42, 43, 44, 45]
+
+##   Estructura del Proyecto
+
+src: Directorio del código fuente.
+common:
+adapters: Configuración externa de librerías críticas.
+entities: Entidad base que extiende variables comunes y define comportamientos pre-insertar y actualizar.
+pipes: Validadores personalizados para endpoints.
+config:
+app.config.ts: Carga la configuración del puerto de la aplicación.
+modules:
+users: Módulo base que controla la lógica de usuarios.
+app.module.ts: Módulo principal de la aplicación.
+main.ts: Punto de entrada de la aplicación.
+.env: Archivo de variables de entorno.
+.eslintrc.js: Reglas de buenas prácticas de programación.
+.gitignore: Archivos y directorios ignorados por Git.
+.prettierrc.js: Configuración para trabajar con ESLint.
+package.json: Archivo de configuración de NPM.
+tsconfig.json: Archivo de configuración de TypeScript.
+
+
+##   Configuración de Entorno
+
+Para el desarrollo, se utiliza un archivo `.env` para gestionar las variables de entorno:
+
+PORT=
+DB_HOST=
+DB_PORT=
+DB_NAME=
+DB_USERNAME=
+DB_PASSWORD=
+
+
+##   Comandos de Desarrollo y Despliegue
+
+```bash
+npm run start:dev: Compila los archivos TypeScript a JavaScript y activa la función de "watch" para recargar los cambios en tiempo real.
+npm run build: Crea la compilación para cargar en producción.
+npm run test: Ejecuta las pruebas del proyecto (si las hubiera).
+Dependencias
+Dependencias Principales
+@nestjs/*: Proporciona las herramientas y funciones principales para el funcionamiento del proyecto.
+bcrypt: Librería para el hashing de contraseñas.
+class-transformer: Librería para validación en DTOs y entidades.
+class-validator: Librería para validación en DTOs y entidades.
+dotenv: Carga las variables de entorno desde un archivo .env.
+pg: Cliente de PostgreSQL para Node.js.
+typeorm: ORM para interactuar con bases de datos.
+uuid: Librería para generar UUIDs.
+Dependencias de Desarrollo
+@types/*: Definiciones de tipo de TypeScript para las librerías.
+eslint: Linter para asegurar buenas prácticas de programación.
+prettier: Formateador de código para trabajar con ESLint.
+jest: Framework de testing para la implementación de pruebas unitarias.
+Comandos de Instalación
+Asegúrate de tener Node.js instalado.
+Instala NestJS globalmente (npm install -g @nestjs/cli).
+Clona el repositorio.
+Ejecuta npm install para instalar las dependencias.
+Configura las variables de entorno en el archivo .env.
+Para la base de datos, instala Docker con la imagen de PostgreSQL o instala y configura PGAdmin.
